@@ -111,7 +111,7 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.main_win = QMainWindow()
 		self.ui_widgetapp = Ui_WidgetAssist()
 		self.ui_widgetapp.setupUi(self.main_win)
-		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v1.4)')
+		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v1.5)')
 
 		self.dev_processing = ThreadClass1(self)
 		self.dev_processing.disable_sig.connect(self.disable_buttons)
