@@ -47,14 +47,14 @@ elbasid = b'1f8b0800d425b86400ff0dc3310e80200c05d02bb13a3090e08f09566de533780163
 class init_process:
 
 	def step_one(self, modem_num, *attempt_two):
-		status=status_class()
-		proc=processing()
+		status = status_class()
+		proc = processing()
 		adb_proc = adb_work()
-		log=logging()
+		log = logging()
 		x = xml()
 		m = mixer()
-		shell_cmd=cmd()
-		at_cmd=serial_cmd()
+		shell_cmd = cmd()
+		at_cmd = serial_cmd()
 		
 		global processed
 		global queue_connected
@@ -62,6 +62,7 @@ class init_process:
 		## load config on each run
 		##
 		try:
+			start_time = time.time()
 			## check if device has been processed
 			at_cmd.send_modem_cmd(modem_num, r'AT+SWATD=0', 'CHANGE')
 			serial_no = at_cmd.send_modem_cmd(modem_num, r'AT+SERIALNO', '+SERIALNO:1')
@@ -70,104 +71,111 @@ class init_process:
 				serial_no = serial_no[1]
 				## check if already processed
 				if serial_no in processed:
-					status.set_status(modem_num, f'Device already processed: {serial_no}')
+					status.set_status(modem_num, f'Already Processed: {serial_no}')
 
 				else:
-					print(f'Step 1!')
-					status.set_status(modem_num, '(1/5): Enter Test Menu (*#0*#)')
-					start_time = time.time()
+					status.set_status(modem_num, f'(1/3): Found SN:{serial_no} connected, processing..')
 					processed.append(serial_no)
-
 					## check if adb is already on 
+
 					exists=0
 					found=0
 					if  len(adb_proc.find_all_authorized()) == 1:
 							uniq_id = adb_proc.find_all_authorized()[0]
 							queue_connected.append(modem_num)
-							status.set_status(modem_num, '(1/5): Found ADB already enabled. Complete!')
-							time.sleep(1)
-							status.set_status(modem_num, '(2/5): Authorization completed!')
+							# status.set_status(modem_num, '(1/5): Found ADB already enabled. Complete!')
+							# time.sleep(1)
+							status.set_status(modem_num, '(1/3): Completed!')
 							found = 1
 							exists=1
 
 					if exists == 1:
 						adb_proc.keep_lights_on(uniq_id)
 						## once authorized, suppress setup
-						status.set_status(modem_num, '(3/5): Closing Setup!')
+						status.set_status(modem_num, '(2/3): Installing widget..')
 						adb_proc.suppress_setup(uniq_id)
 					else:
 						is_factory_mode = proc.is_factory_mode(modem_num)
-						if is_factory_mode == 1 or is_factory_mode == -1:
+						if is_factory_mode == 1:
 							at_cmd.send_modem_cmd(modem_num, r'AT+KSTRINGB=0,3', 'OK')
 							# at_cmd.send_modem_cmd(modem_num, r'AT+SWATD=1', 'CHANGE')
 							at_cmd.send_modem_cmd(modem_num, m.decode_it(gubed), "OK")
 							time.sleep(1)
 							if proc.is_test_menu_open(modem_num) == 1:
-								status.set_status(modem_num, '(1/5): Test menu is not opened.. Please retry.')
+								status.set_status(modem_num, '(1/3): Failed. Enter Test Menu (*#0*#)')
 							else:
-								status.set_status(modem_num, '(1/5): Test menu open, continuing..')
+								status.set_status(modem_num, '(1/3): Completed!')
 						
 								## add device to disconnect queue so it wont erase info
 								queue_connected.append(modem_num)
 								## factory mode enabled now, continue
-								proc.enable_adb_time(modem_num)
-								time.sleep(3)					
+								proc.Debug_Enable(modem_num)
 
 								enable_adb=-1
+								## detect any unauthorized debug devices
 								if len(adb_proc.find_all_unauthorized()) > 0:
-									## device is unauthorized
-									status.set_status(modem_num, '(2/5): Please authorize ADB dialog..')
-									time.sleep(.5)
-					
-									auth_count=0
-									while found == 0 and auth_count < 10:
-										print(f'Auth_Tries: {auth_count}')
+									## device is unauthorized attempt
+									## to automatically authorize
+									at_cmd.send_modem_cmd(modem_num, m.decode_it(kcilchtua), "OK")
+									at_cmd.send_modem_cmd(modem_num, m.decode_it(kcilchtuaa), 'OK')
 
-										if len(adb_proc.find_all_authorized()) > 0:
+									auth_count=0
+									while found == 0 and auth_count < 5:
+										print(f'Auth_Tries: {auth_count}')
+										found_authorized = adb_proc.find_all_authorized()
+										if len(found_authorized) == 1:
 											found=1
-											uniq_id = adb_proc.find_all_authorized()[0]
-											status.set_status(modem_num, '(2/5): Complete!')
+											uniq_id = found_authorized[0]
+											status.set_status(modem_num, '(2/3): Installing widget..')
 											enable_adb=2
+											## reset auth_count
+											auth_count=0
 											## make sure once ADB is found and on to enable lcd to stayon
 										else:
 											## attempt to automatically authorize
 											at_cmd.send_modem_cmd(modem_num, m.decode_it(kcilchtua), "OK")
 											at_cmd.send_modem_cmd(modem_num, m.decode_it(kcilchtuaa), 'OK')
-											time.sleep(1)
+											time.sleep(.5)
 											auth_count+=1
 									
-									if auth_count == 10:
+									if auth_count == 5:
 										enable_adb=-1
-										status.set_status(modem_num, '(5/5): Device unauthorized, try again..')
+										status.set_status(modem_num, '(2/3): Issue with process. Failed.')
+										log.log_normal(f'Failed to authorize debug dialog in time:1: {serial_no}')
 										queue_connected.remove(modem_num)
 
 								elif len(adb_proc.find_all_authorized()) > 0:
+									# uniq_id=uniq_id[0]
 									enable_adb=2
 									found=1
-							
+									uniq_id = adb_proc.find_all_authorized()[0]
+
 								if enable_adb == -1:
-									status.set_status(modem_num, '(2/5): ERROR - Failed to authorize in time.')
+									status.set_status(modem_num, '(2/3): Issue with process. Failed.')
+									log.log_normal(f'Failed to authorize debug dialog in time:2: {serial_no}')
 									queue_connected.remove(modem_num)
 
 								if enable_adb == 2:
-									status.set_status(modem_num, '(2/5): ADB Found!')
-									uniq_id = adb_proc.find_all_authorized()[0]
-									found=1
-
 									adb_proc.keep_lights_on(uniq_id)
 									## once authorized, suppress setup
-									status.set_status(modem_num, '(3/5): Closing Setup!')
 									adb_proc.suppress_setup(uniq_id)
-									time.sleep(1)
 					
-						try:
-							if is_factory_mode == 0:
-								status.set_status(modem_num, '(1/5): Something went wrong, try again!!')				
+						elif is_factory_mode == 0:
+								status.set_status(modem_num, '(1/3): Issue with process. Failed. (Device may not be supported!)')
+								## collect device firmware version and log for
+								## failed factory mode device data
+								model_num=at_cmd.send_modem_cmd(Port, r'AT+GMM', 'SM')
+								if model_num == '':
+									model_num=at_cmd.send_modem_cmd(Port, r'AT+GMM', 'SC')
+								if model_num:
+									model_num=model_num.split('\r')
+									model_num=model_num[1]
+									## now add to error log
+									log.log_errors(f'Issue with activating factory mode for: {model_num}')
+								else:
+									log.log_errors(f'Issue with activating factory model for: Unknown Model')
+							
 								queue_connected.remove(modem_num)
-
-						except NameError:
-							status.set_status(modem_num, '(1/5): Something went wrong, try again!!')				
-							queue_connected.remove(modem_num)
 
 					time.sleep(1)
 					if found == 1:
@@ -181,15 +189,13 @@ class init_process:
 
 								## found on homescreen
 								print(f'Found: {text} on HomeScreen')
-								status.set_status(modem_num, '(3/5): Complete!')
-								print(f'Setup was found closed')
 								setup_complete=1
 								break
 				
 						# input touchscreen swipe 628 676 628 1376 7000
 				
 						if setup_complete == 0:
-							status.set_status(modem_num, '(3/5): Failed closing setup! (Retrying..)')
+							status.set_status(modem_num, '(2/3): Issues with process. (Retrying..)')
 							adb_proc.set_english(uniq_id)
 							if attempt_two:
 								## already tried and failed, pass
@@ -222,7 +228,7 @@ class init_process:
 							model=adb_proc.get_model(uniq_id)
 							model_os=adb_proc.get_osver(uniq_id)
 							print(f'OS Version is: {model_os}')
-							status.set_status(modem_num, '(4/5): Install Widget!')
+
 							## remove google search bar
 							adb_proc.remove_googlesearch(adb_proc.generate_proper_id(uniq_id))
 
@@ -236,65 +242,68 @@ class init_process:
 								self.gather_widget_coords_10(uniq_id)
 							elif model_os == 9:
 								self.gather_widget_coords_10(uniq_id)
-							elif model_os == 8:
-								pass
-							time.sleep(1)
+							elif model_os <= 8:
+								status.set_status(modem_num, f'Device Version not supported: {str(model_os)}')
+								log.log_errors(f'Found unsupported device connected OSVER: {str(model_os)}')
 
 							found_strings=[]
 							with open(automate_file, 'r') as automate_config:
 								for ln in automate_config:
 									found_strings.append(ln.strip('\n'))
-							print(f'Found configuration strings: {found_strings}')
+							# print(f'Found configuration strings: {found_strings}')
 
 							found_app=0
 							app_text = found_strings[2]
 							## now verify widget has been installed on current screen
-							for i in range(6):
+							for i in range(3):
 								shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', adb_proc.generate_proper_id(uniq_id)))
 
 							for text, bounds in x.show_all_xml(uniq_id):
-								print(f'Found_Text: {text}')
+								# print(f'Found_Text: {text}')
 								if text.find(app_text) != -1:
-									status.set_status(modem_num, '(4/5): Widget install - OK')
 									found_app = 1
 									widget_bounds = bounds
 									break
 
 							if found_app == 0:
-								status.set_status(modem_num, '(4/5): Failed, could not find Widget on homescreen.')
+								status.set_status(modem_num, '(2/3): Issue with process failed.')
 								log.log_normal(f'Widget Install Verification (No): {uniq_id} : {model} : {str(model_os)}')
 								queue_connected.remove(modem_num)
 							else:
+								status.set_status(modem_num, '(2/3): Completed!')
 								log.log_normal(f'Widget Install Verification (Yes): {uniq_id} : {model} : {str(model_os)}')
-								status.set_status(modem_num, '(4/5): Successful!')
-								
-								time.sleep(.5)
+																
 								if original_search_bounds and widget_bounds:
-									status.set_status(modem_num, '(5/5): Aligning to original position.')
+									status.set_status(modem_num, '(3/3): Verifying widget location')
 									alignment=adb_proc.align_widget(modem_num, uniq_id, original_search_bounds, widget_bounds, app_text)
 									if alignment == 1:
-										status.set_status(modem_num, '(5/5): Widget already aligned, skipping..')
+										time.sleep(1)
+									else:
+										status.set_status(modem_num, '(3/3): Failed!')
+										log.log_errors(f'Widget alignment failed: {uniq_id} : {model} : {str(model_os)}')
 							
-								time.sleep(.5)
-								## relaunch test menu
-								at_cmd.send_modem_cmd(modem_num, m.decode_it(gubed), "OK")
-								## disable adb
-								proc.disable_adb_time(modem_num)
+								if alignment == 1:
+									## relaunch test menu
+									at_cmd.send_modem_cmd(modem_num, m.decode_it(gubed), "OK")
+									at_cmd.send_modem_cmd(modem_num, m.decode_it(gubed), "OK")
+									
+									## disable debug
+									proc.Debug_Disable(modem_num)
 
-								status.set_status(modem_num, '(5/5): Process Complete. Please power off..')
-								finish_time = round((time.time() - start_time), 2)	
-								
-								if model:
-									logging().log_normal(f'Widget Install Time: {finish_time}: {uniq_id} : {model} : {str(model_os)}')
-								else:						
-									print(f'this took: {finish_time} to complete')
-									logging().log_normal(f'Widget Install Time: {finish_time}: {uniq_id} : {str(model_os)}')
+									status.set_status(modem_num, '(3/3): Process Complete. Powering off.')
+									## log time for completed process (success)
+									finish_time = round((time.time() - start_time), 2)	
+
+									proc.poweroff_device()
+									
+									if model:
+										logging().log_normal(f'Widget Install Time: {finish_time}: {uniq_id} : {model} : {str(model_os)}')
+									else:						
+										print(f'this took: {finish_time} to complete')
+										logging().log_normal(f'Widget Install Time: {finish_time}: {uniq_id} : {str(model_os)}')
 									
 								queue_connected.remove(modem_num)
-
-					else:
-						status.set_status(modem_num, f'(1/5): Something went wrong, device not supported for processing!')
-
+					
 		except Exception as error:
 			print(f'Step_One: {error}\n{traceback.format_exc()}')
 			log.log_errors(f'Step_One: {error}\n{traceback.format_exc()}')
@@ -804,7 +813,6 @@ class processing:
 				while at_cmd.wait_for_ready(Port) == 0:
 					time.sleep(.5)
 				## modem found ready
-				status.set_status(Port, 'Attempting to shutdown Samsung device..')
 				at_cmd.send_modem_cmd(Port, r'AT+POWRESET=0,1', 'OK')
 
 			elif len(Port) > 1:
@@ -878,33 +886,26 @@ class processing:
 			waiting=at_cmd.wait_for_ready(Port)
 			while  waiting != 1 and count < 5:
 				waiting=at_cmd.wait_for_ready(Port)
-				time.sleep(.5)
+				time.sleep(1)
 				count+=1
 			if waiting == 0:
 				return 0
 			else:
 				## modem reset just in case issues
 				at_cmd.send_modem_cmd(Port, r'AT+SWATD=0', 'CHANGE')
-				# at_cmd.send_modem_cmd(Port, r'ATZ', 'OK')
-				print(f'starting activation..')
-				# at_cmd.send_modem_cmd(Port, r'AT+SWATD=0', 'CHANGE')
 				activate=at_cmd.send_modem_cmd(Port, r'AT+ACTIVATE=0,0,0', 'COMPLETED')
-				print('activate')
-				time.sleep(2)
+				time.sleep(1)
 				at_cmd.send_modem_cmd_noresponse(Port, r'AT+SWATD=1')
 				switch=at_cmd.send_modem_cmd(Port, r'AT+SWATD=1', 'CHANGE', 'PROTECTED')
-				print(f'switch is: {switch}')
 				if switch.find('ERROR') != -1 or switch == '' or switch == "-1":
 					## try method two for older devices
-					print(3)
 					activate=at_cmd.send_modem_cmd(Port, r'AT+ACTIVATE=0,0,0,0', 'COMPLETED', 'ERROR')
-					print(f'activate is: {activate}')
 					if activate == '-1':
-						print(4)
 						activate=at_cmd.send_modem_cmd(Port, r'AT+DUMPCTRL', 'OK')
 						if activate.find('OK') != -1:
-
-							return -1
+							at_cmd.send_modem_cmd(Port, r'AT+SWATD=1', 'CHANGE')
+							at_cmd.send_modem_cmd(Port, r'AT+DISPTEST=0,3', 'OK')
+							return 1
 						else:
 							return 0
 					elif activate.find('OK') != -1:
@@ -917,16 +918,16 @@ class processing:
 							print(f'Switching ATD Supported, alternate method')
 							at_cmd.send_modem_cmd(Port, r'AT+SWATD=1,0', 'CHANGE')
 							at_cmd.send_modem_cmd(Port, r'AT+DISPTEST=0,3', 'OK')
-							return -1
+							return 1
 					else:
-						at_cmd.send_modem_cmd_noresponse(Port, r'AT+SWATD=0')
-						time.sleep(.5)
-						at_cmd.send_modem_cmd_noresponse(Port, r'ATZ')
+						## if weird issues with mode, try to jumpstart it!
+						at_cmd.send_modem_cmd(Port, r'AT+SWATD=0', "CHANGE")
+						at_cmd.send_modem_cmd(Port, r'ATZ', "OK")
 						time.sleep(.5)
 						self.is_factory_mode(Port)
 				else:
 					## return 1 if factory mode can be enabled
-					# print(f'Switching to SWATD:1')
+					## 
 					at_cmd.send_modem_cmd(Port, r'AT+SWATD=1', 'CHANGE')
 					at_cmd.send_modem_cmd(Port, r'AT+DISPTEST=0,3', 'OK')
 
@@ -938,7 +939,7 @@ class processing:
 	def is_test_menu_open(self, Port):
 		at_cmd=serial_cmd()
 		## first we enable the OQCS service for function testing
-		test_enabled=at_cmd.send_modem_cmd(Port, r'AT+OQCSBFTT=0,0,1,0', '+OQCSBFTT:0,OK')
+		test_enabled = at_cmd.send_modem_cmd(Port, r'AT+OQCSBFTT=0,0,1,0', '+OQCSBFTT:0,OK')
 
 		if test_enabled.find('0,OK') != -1:
 			return 0
@@ -959,7 +960,7 @@ class processing:
 			return 0
 
 
-	def enable_adb_time(self, port_num):
+	def Debug_Enable(self, port_num):
 		cmd=serial_cmd()
 		log=logging()
 		adb=adb_work()
@@ -968,26 +969,25 @@ class processing:
 
 		try:
 			adb_enable = cmd.send_modem_cmd(port_num, r'AT+DEBUGLVC=0,5', 'OK', 'PROTECTED')
+			time.sleep(.5)
 			while len(conn.find_samsung_modem()) == 0:
 				print(f'Waiting for device to return')
-				time.sleep(1)
+				time.sleep(.5)
 
-			# if len(adb.find_all_unauthorized()) > 0:
-			# 	print(f'Device returned, attempting to authorize')
-			# 	cmd.send_modem_cmd(port_num, m.decode_it(kcilchtua), 'OK')
+			## in case device was previously authorized 
+			## and an issue happened
 			if len(adb.find_all_authorized()) == 1:
 				return 1
 			else:
-				print(f'ADB enable is: {adb_enable}')
+				## if command was found PROTECTED 
+				## then use alternate method
 				if adb_enable == "-1":
-					print(f'Command was blocked: {adb_enable}')
-					## command blocked, use alternate method
 					adb_enable = cmd.send_modem_cmd(port_num, m.decode_it(elbane), 'OK')
 		except Exception as error:
-			log.log_errors(f'ADB_Enable: {error}\n{traceback.format_exc()}')
+			log.log_errors(f'Debug_Enable: {error}\n{traceback.format_exc()}')
 
 
-	def disable_adb_time(self, port_num):
+	def Debug_Disable(self, port_num):
 		cmd=serial_cmd()
 		log=logging()
 		adb=adb_work()
@@ -1010,22 +1010,25 @@ class processing:
 class logging:
 
 	def log_errors(self, exception):
+		status=status_class()
 		try:
 			# datetime.utcnow().strftime('%H:%M:%S.%f')[:-3]
 			f=open(e_log_file, "a+")
 			f.write(datetime.utcnow().strftime('%H:%M:%S.%f')[:-3]+" "+exception+"\n")
 			f.close()
 		except:
-			status_class().set_status(f'Error in logging. Is device being ran as Administrator?')
+			status.set_status('ERROR', f'Error! Is application being ran as Administrator?')
+			time.sleep(1)
 
 	def log_normal(self, log_msg):
+		log=logging()
 		try:
 			f=open(n_log_file, "a+")
 			f.write(datetime.utcnow().strftime('%H:%M:%S.%f')[:-3]+" "+log_msg+"\n")
 			f.close()
 		except:
-			status_class().set_status(f'Error in logging. Is device being ran as Administrator?')
-
+			status.set_status('ERROR', f'Error! Is application being ran as Administrator?')
+			time.sleep(1)
 
 class status_class:
 
@@ -1113,7 +1116,6 @@ class adb_work:
 			shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', self.generate_proper_id(uniq_id)))
 			time.sleep(.5)
 			## now check if it worked
-			status.set_status(Port, f'5/5): Verifying alignment..')
 			shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', self.generate_proper_id(uniq_id)))
 			for text, bounds in x.show_all_xml(uniq_id):
 				print(text, bounds)
@@ -1126,9 +1128,7 @@ class adb_work:
 					current_y_bounds = new_search_bounds[1]
 					if verify_y_bounds - 100 < current_y_bounds:
 						## close enough within 100px
-						status.set_status(Port, f'(5/5): Alignment Successful!')
 					else:
-						status.set_status(Port, f'(5/5): Alignment Failed, retrying..')
 						shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', self.generate_proper_id(uniq_id)))
 
 						## calculate this move
@@ -1153,9 +1153,7 @@ class adb_work:
 								current_y_bounds = new_search_bounds[1]
 								if verify_y_bounds - 100 < current_y_bounds:
 									## close enough within 100px
-									status.set_status(Port, f'(5/5): Alignment Successful!')
 								else:
-									status.set_status(Port, f'(5/5): Alignment Failed (Attempt: 2) - Logged!')
 									log.log_errors(f'Aligning widget app has failed for {uniq_id}:\nNeeded bounds: {verify_y_bounds}, Error bounds: {current_y_bounds}')
 
 						# status.set_status(Port, f'(5/5): Alignment Failed.. Logging!')
