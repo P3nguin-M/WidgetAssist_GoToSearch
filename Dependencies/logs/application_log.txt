@@ -1,0 +1,215 @@
+14:47:18.228 Widget Install Verification (Yes): R58M95MT1BW : SM-A205U1 : 11
+14:47:19.236 Widget Install Time: 50.8: R58M95MT1BW : SM-A205U1 : 11
+14:49:17.102 Widget Install Verification (Yes): 2aa15f79f43f7ece : SM-N960U : 10
+14:49:24.727 Widget Install Time: 67.28: 2aa15f79f43f7ece : SM-N960U : 10
+14:56:48.872 Widget Install Verification (Yes): R58M95MT1BW : SM-A205U1 : 11
+14:56:49.877 Widget Install Time: 82.77: R58M95MT1BW : SM-A205U1 : 11
+14:18:22.316 Widget Install Verification (Yes): R5CR20GEXWV : SM-N986U : 11
+14:18:23.321 Widget Install Time: 42.42: R5CR20GEXWV : SM-N986U : 11
+14:34:39.513 Widget Install Verification (Yes): R58M38DP54J : SM-G975U1 : 12
+14:34:46.629 Widget Install Time: 65.02: R58M38DP54J : SM-G975U1 : 12
+14:42:04.300 Widget Install Verification (Yes): R58N745CLXA : SM-A515U : 13
+14:42:12.170 Widget Install Time: 52.86: R58N745CLXA : SM-A515U : 13
+14:45:43.142 Widget Install Verification (No): RFCR919NDSM : SM-F926U : 13
+14:46:41.336 Widget Install Verification (Yes): RFCR919NDSM : SM-F926U : 13
+14:46:48.246 Widget Install Time: 42.23: RFCR919NDSM : SM-F926U : 13
+14:51:53.607 Widget Install Verification (Yes): R58R127X5WD : SM-A515U : 13
+14:52:01.581 Widget Install Time: 54.81: R58R127X5WD : SM-A515U : 13
+15:15:27.705 Widget Install Verification (Yes): RFCR919NDSM : SM-F926U : 13
+15:15:34.651 Widget Install Time: 41.3: RFCR919NDSM : SM-F926U : 13
+13:06:25.269 Found com ports: 
+13:06:26.471 Found com ports: 
+13:06:27.688 Found com ports: 
+13:06:28.945 Found com ports: 
+13:06:30.149 Found com ports: 
+13:06:31.338 Found com ports: 
+13:06:32.498 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:17.794 Widget Install Verification (Yes): RF8M32Z9KEE : SM-G973U : 12
+13:07:25.012 Widget Install Time: 51.01: RF8M32Z9KEE : SM-G973U : 12
+13:07:26.415 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:27.711 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:28.868 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:29.928 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:30.081 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:31.314 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:32.635 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:33.971 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:35.311 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:36.563 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:37.804 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:39.026 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:40.245 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:41.458 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:42.771 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:07:44.053 Found com ports: 
+13:07:45.305 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:08:02.432 Found com ports: 
+13:08:03.700 Found com ports: 
+13:08:04.951 Found com ports: 
+13:08:06.131 Found com ports: 
+13:08:07.309 Found com ports: 
+13:08:08.610 Found com ports: 
+13:08:09.842 Found com ports: 
+13:08:11.078 Found com ports: 
+13:08:12.361 Found com ports: 
+13:08:13.630 Found com ports: 
+13:08:14.945 Found com ports: 
+13:08:16.212 Found com ports: 
+13:08:17.444 Found com ports: 
+13:08:18.653 Found com ports: 
+13:08:19.897 Found com ports: 
+13:08:21.172 Found com ports: 
+13:08:22.442 Found com ports: 
+13:08:23.610 Found com ports: 
+13:08:24.785 Found com ports: 
+13:08:25.942 Found com ports: 
+13:08:27.153 Found com ports: 
+13:08:28.470 Found com ports: 
+13:08:29.754 Found com ports: 
+13:08:31.083 Found com ports: 
+13:08:32.364 Found com ports: 
+13:08:33.686 Found com ports: 
+13:08:34.952 Found com ports: 
+13:08:36.118 Found com ports: 
+13:08:37.317 Found com ports: 
+13:08:38.554 Found com ports: 
+13:08:39.766 Found com ports: 
+13:08:40.952 Found com ports: 
+13:08:42.136 Found com ports: 
+13:08:43.349 Found com ports: 
+13:08:44.583 Found com ports: 
+13:08:45.757 Found com ports: 
+13:08:46.954 Found com ports: 
+13:08:48.168 Found com ports: 
+13:08:49.438 Found com ports: 
+13:08:50.752 Found com ports: 
+13:08:51.987 Found com ports: 
+13:08:53.125 Found com ports: 
+13:08:54.269 Found com ports: 
+13:08:55.474 Found com ports: 
+13:08:56.613 Found com ports: 
+13:08:57.854 Found com ports: 
+13:08:59.182 Found com ports: 
+13:09:00.336 Found com ports: 
+13:09:01.538 Found com ports: 
+13:09:02.758 Found com ports: 
+13:09:04.000 Found com ports: 
+13:09:05.243 Found com ports: 
+13:09:06.559 Found com ports: 
+13:09:07.868 Found com ports: 
+13:09:09.147 Found com ports: 
+13:09:10.468 Found com ports: 
+13:09:11.756 Found com ports: 
+13:09:12.960 Found com ports: 
+13:09:14.250 Found com ports: 
+13:09:15.387 Found com ports: 
+13:09:16.630 Found com ports: 
+13:09:17.859 Found com ports: 
+13:09:19.105 Found com ports: 
+13:09:20.387 Found com ports: 
+13:09:21.714 Found com ports: 
+13:09:22.968 Found com ports: 
+13:09:24.177 Found com ports: 
+13:09:25.346 Found com ports: 
+13:09:26.568 Found com ports: 
+13:09:27.763 Found com ports: 
+13:09:28.934 Found com ports: 
+13:09:30.096 Found com ports: 
+13:09:31.270 Found com ports: 
+13:09:32.500 Found com ports: 
+13:09:33.818 Found com ports: 
+13:09:35.077 Found com ports: 
+13:09:36.335 Found com ports: 
+13:09:37.590 Found com ports: 
+13:09:38.793 Found com ports: 
+13:09:39.997 Found com ports: 
+13:09:41.205 Found com ports: 
+13:09:42.382 Found com ports: 
+13:09:43.644 Found com ports: 
+13:09:44.804 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:10:27.780 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:13:55.102 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:14:09.300 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:14:56.666 Widget Install Verification (Yes): RF8M32Z9KEE : SM-G973U : 12
+13:15:03.753 Widget Install Time: 67.15: RF8M32Z9KEE : SM-G973U : 12
+13:15:04.975 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:06.171 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:07.481 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:08.719 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:09.919 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:11.102 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:12.406 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:13.601 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:14.871 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:16.070 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:17.342 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:18.622 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:19.857 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:21.040 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:22.304 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:23.528 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:24.706 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:25.928 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:27.062 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:28.257 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:29.514 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:30.750 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:31.023 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:31.927 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:33.180 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+13:15:34.431 Found com ports: COM142  -  SAMSUNG Mobile USB Modem  OK
+
+18:28:00.192 Widget Install Verification (Yes): R5CT52ZSMCH : SM-S901U : 13
+18:28:07.109 Widget Install Time: 60.35: R5CT52ZSMCH : SM-S901U : 13
+18:31:30.053 Widget Install Verification (Yes): R5CT52ZSMCH : SM-S901U : 13
+18:31:38.270 Widget Install Time: 61.22: R5CT52ZSMCH : SM-S901U : 13
+15:33:40.179 Failed to authorize debug dialog in time:2: RFCT10RCJHH
+15:34:54.903 Failed to authorize debug dialog in time:2: RFCT10RCJHH
+15:37:27.991 Widget Install Verification (Yes): RFCT10RCJHH : SM-G781U : 12
+15:37:33.921 Widget alignment failed: RFCT10RCJHH : SM-G781U : 12

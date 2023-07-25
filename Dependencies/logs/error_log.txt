@@ -1,0 +1,93 @@
+14:50:46.967 Modem_CMD2: Write timeout
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 684, in send_modem_cmd
+    PORT.write(str.encode(f'{CMD}\r'))
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\serial\serialwin32.py", line 325, in write
+    raise SerialTimeoutException('Write timeout')
+serial.serialutil.SerialTimeoutException: Write timeout
+
+14:51:01.289 Step_One: 'NoneType' object is not iterable
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 162, in step_one
+    for text, bounds in found_coords:
+TypeError: 'NoneType' object is not iterable
+
+14:35:03.710 Modem_CMD1: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 721, in send_modem_cmd
+    output=str(PORT.readline(), 'utf-8')
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\serial\serialwin32.py", line 275, in read
+    raise SerialException("ClearCommError failed ({!r})".format(ctypes.WinError()))
+serial.serialutil.SerialException: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+
+14:35:03.981 Modem_CMD1: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 721, in send_modem_cmd
+    output=str(PORT.readline(), 'utf-8')
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\serial\serialwin32.py", line 275, in read
+    raise SerialException("ClearCommError failed ({!r})".format(ctypes.WinError()))
+serial.serialutil.SerialException: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+
+14:35:03.984 Modem_CMD1: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 721, in send_modem_cmd
+    output=str(PORT.readline(), 'utf-8')
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\serial\serialwin32.py", line 275, in read
+    raise SerialException("ClearCommError failed ({!r})".format(ctypes.WinError()))
+serial.serialutil.SerialException: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+
+14:36:30.336 Step_One: list.remove(x): x not in list
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 150, in step_one
+    queue_connected.remove(modem_num)
+ValueError: list.remove(x): x not in list
+
+14:50:09.833 Step_One: list.remove(x): x not in list
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 150, in step_one
+    queue_connected.remove(modem_num)
+ValueError: list.remove(x): x not in list
+
+14:51:01.586 Step_One: 'NoneType' object is not iterable
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 162, in step_one
+    for text, bounds in found_coords:
+TypeError: 'NoneType' object is not iterable
+
+13:07:49.978 Modem_CMD1: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 720, in send_modem_cmd
+    output=str(PORT.readline(), 'utf-8')
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\serial\serialwin32.py", line 275, in read
+    raise SerialException("ClearCommError failed ({!r})".format(ctypes.WinError()))
+serial.serialutil.SerialException: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+
+13:07:50.110 Modem_CMD1: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 720, in send_modem_cmd
+    output=str(PORT.readline(), 'utf-8')
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\serial\serialwin32.py", line 275, in read
+    raise SerialException("ClearCommError failed ({!r})".format(ctypes.WinError()))
+serial.serialutil.SerialException: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+
+13:07:50.113 Modem_CMD1: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 720, in send_modem_cmd
+    output=str(PORT.readline(), 'utf-8')
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\serial\serialwin32.py", line 275, in read
+    raise SerialException("ClearCommError failed ({!r})".format(ctypes.WinError()))
+serial.serialutil.SerialException: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+
+18:28:07.051 ADB_Enable: mixer.decode_it() missing 1 required positional argument: 'jargon'
+Traceback (most recent call last):
+  File "Z:\scripts\py\SH\Widget_Final\GoToSearch\widget_module.py", line 999, in disable_adb_time
+    cmd.send_modem_cmd(port_num, m.decode_it())
+                                 ^^^^^^^^^^^^^
+TypeError: mixer.decode_it() missing 1 required positional argument: 'jargon'
+
