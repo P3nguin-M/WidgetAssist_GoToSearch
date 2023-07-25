@@ -104,6 +104,7 @@ class ThreadClass2(QtCore.QThread):
 		self._stopped = True
 
 
+
 class MainWindow(QMainWindow, Ui_WidgetAssist):
 	def __init__(self, parent = None):
 		super(MainWindow, self).__init__(parent)
@@ -111,7 +112,7 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.main_win = QMainWindow()
 		self.ui_widgetapp = Ui_WidgetAssist()
 		self.ui_widgetapp.setupUi(self.main_win)
-		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v1.5)')
+		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v2.0)')
 
 		self.dev_processing = ThreadClass1(self)
 		self.dev_processing.disable_sig.connect(self.disable_buttons)
@@ -149,13 +150,12 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 				self.ui_widgetapp.PORT_WIN.setText('')
 				self.ui_widgetapp.TEXT_WIN.setText('')
 			else:
-				port_text = f'Currently Processing {port_num}'
+				port_text = f'Detected {port_num}'
 				self.ui_widgetapp.PORT_WIN.setText(port_text)
 				self.ui_widgetapp.TEXT_WIN.append("".join(msg_info))
 				self.ui_widgetapp.TEXT_WIN.verticalScrollBar().setValue(self.ui_widgetapp.TEXT_WIN.verticalScrollBar().maximum())
 		except Exception as error:
 			log.log_errors(f'GUI_Update: ')
-		
 
 	def enable_buttons(self):
 		try:
@@ -177,6 +177,20 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		except Exception as e:
 			log.log_errors(f'disable_btns: {e}')
 
+	def load_apk(self):
+		imported_apk_file = QFileDialog.getOpenFileName(self, 'Select .apk file given for processing', 'c:\\',"APK File (*.apk)")
+		if imported_apk_file:
+			imported_apk_file_path=imported_apk_file[0]
+			if file.import_apk_file(imported_apk_file_path) == 1:
+				log.log_normal(f'Imported install.apk for first time use')
+				main_win.show()
+				# getattr(main_win, "raise")()
+				main_win.activateWindow()
+				sys.exit(app.exec_())
+			else:
+				log.log_errors(f'Error while loading install.apk\n{traceback.format_exc()}')
+
+
 	def hide(self):
 		self.main_win.hide()
 
@@ -184,14 +198,20 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 	def show(self):
 		self.main_win.show()
 
+
+
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	app.setWindowIcon(QtGui.QIcon(icon_file))
+	try:
+		if file.check_apk_exists() == 1:
+			main_win = MainWindow()
+			main_win.show()
+			main_win.activateWindow()
+			sys.exit(app.exec_())
+		else:
+			main_win = MainWindow()
+			main_win.load_apk()
 
-	main_win = MainWindow()
-	main_win.show()
-	# getattr(main_win, "raise")()
-	main_win.activateWindow()
-	## for secondary window
-	# main_win.show_lg_adb()
-	sys.exit(app.exec_())
+	except Exception as e:
+		print(f'Main: {e}\n{traceback.format_exc()}')
