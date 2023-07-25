@@ -171,9 +171,9 @@ class init_process:
 									model_num=model_num.split('\r')
 									model_num=model_num[1]
 									## now add to error log
-									log.log_errors(f'Issue with activating factory mode for: {model_num}')
+									log.log_normal(f'Issue with activating factory mode for: {model_num}')
 								else:
-									log.log_errors(f'Issue with activating factory model for: Unknown Model')
+									log.log_normal(f'Issue with activating factory model for: Unknown Model')
 							
 								queue_connected.remove(modem_num)
 
@@ -244,7 +244,7 @@ class init_process:
 								self.gather_widget_coords_10(uniq_id)
 							elif model_os <= 8:
 								status.set_status(modem_num, f'Device Version not supported: {str(model_os)}')
-								log.log_errors(f'Found unsupported device connected OSVER: {str(model_os)}')
+								log.log_normal(f'Found unsupported device connected OSVER: {str(model_os)}')
 
 							found_strings=[]
 							with open(automate_file, 'r') as automate_config:
@@ -280,7 +280,7 @@ class init_process:
 										time.sleep(1)
 									else:
 										status.set_status(modem_num, '(3/3): Failed!')
-										log.log_errors(f'Widget alignment failed: {uniq_id} : {model} : {str(model_os)}')
+										log.log_normal(f'Widget alignment failed: {uniq_id} : {model} : {str(model_os)}')
 							
 								if alignment == 1:
 									## relaunch test menu
@@ -1154,7 +1154,7 @@ class adb_work:
 								if verify_y_bounds - 100 < current_y_bounds:
 									## close enough within 100px
 								else:
-									log.log_errors(f'Aligning widget app has failed for {uniq_id}:\nNeeded bounds: {verify_y_bounds}, Error bounds: {current_y_bounds}')
+									log.log_normal(f'Aligning widget app has failed for {uniq_id}:\nNeeded bounds: {verify_y_bounds}, Error bounds: {current_y_bounds}')
 
 						# status.set_status(Port, f'(5/5): Alignment Failed.. Logging!')
 
