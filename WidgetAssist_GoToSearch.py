@@ -5,6 +5,8 @@ from PyQt5.QtGui import *
 from PyQt5 import QtCore, QtGui
 import os, time, subprocess, sys, traceback
 from widget_gui import Ui_WidgetAssist
+from user_alert import Ui_AlertWindow
+
 ## generate mainwindow.py using .ui file ()
 ## python -m PyQt5.uic.pyuic -x mainwindow.ui -o mainwindow.py
 import widget_module as mod
@@ -112,7 +114,13 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.main_win = QMainWindow()
 		self.ui_widgetapp = Ui_WidgetAssist()
 		self.ui_widgetapp.setupUi(self.main_win)
-		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v2.0)')
+		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v2.1)')
+
+		self.alert_win = QMainWindow()
+		self.alert_ui = Ui_AlertWindow()
+		self.alert_win.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+		self.alert_ui.setupUi(self.alert_win)
+		# self.show_alert()
 
 		self.dev_processing = ThreadClass1(self)
 		self.dev_processing.disable_sig.connect(self.disable_buttons)
@@ -127,6 +135,8 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.ui_widgetapp.reboot.triggered.connect(lambda: thread.create_thread(f'processing().reboot_device()'))
 		self.ui_widgetapp.shutdown.triggered.connect(lambda: thread.create_thread(f'processing().poweroff_device()'))
 		self.ui_widgetapp.retry_proc.triggered.connect(lambda: thread.create_thread(f'processing().reset_device()'))
+		
+		self.alert_ui.browse_apk.clicked.connect(self.load_apk)
 		# self.ui_widgetapp.searcherr.triggered.connect()
 		# self.ui_widgetapp.gotosearch.triggered.connect()
 		# self.gui_status.update_status_sig.connect(self.update_status_window)
@@ -179,17 +189,28 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 
 	def load_apk(self):
 		imported_apk_file = QFileDialog.getOpenFileName(self, 'Select .apk file given for processing', 'c:\\',"APK File (*.apk)")
-		if imported_apk_file:
-			imported_apk_file_path=imported_apk_file[0]
-			if file.import_apk_file(imported_apk_file_path) == 1:
-				log.log_normal(f'Imported install.apk for first time use')
-				main_win.show()
-				# getattr(main_win, "raise")()
-				main_win.activateWindow()
-				sys.exit(app.exec_())
-			else:
-				log.log_errors(f'Error while loading install.apk\n{traceback.format_exc()}')
+		try:
+			if imported_apk_file:
+				imported_apk_file_path=imported_apk_file[0]
+				if file.import_apk_file(imported_apk_file_path) == 1:
+					log.log_normal(f'Imported install.apk for first time use')
+					main_win.show()
+					self.hide_alert()
+					# getattr(main_win, "raise")()
+					# main_win.activateWindow()
+					# sys.exit(app.exec_())
+				else:
+					log.log_errors(f'Error while loading install.apk\n{traceback.format_exc()}')
+		except Exception as e:
+			print(f'Import_APK: {e}')
+			log.log_errors(f'Import_APK: {e}\n{traceback.format_exc()}')
 
+
+	def show_alert(self):
+		self.alert_win.show()
+
+	def hide_alert(self):
+		self.alert_win.hide()
 
 	def hide(self):
 		self.main_win.hide()
@@ -204,14 +225,23 @@ if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	app.setWindowIcon(QtGui.QIcon(icon_file))
 	try:
-		if file.check_apk_exists() == 1:
+		## make sure if demo apk is 
+		## only installed to alert user
+		## on every runtime instance
+		if file.check_apk_md5() == 0:
 			main_win = MainWindow()
 			main_win.show()
 			main_win.activateWindow()
 			sys.exit(app.exec_())
 		else:
 			main_win = MainWindow()
-			main_win.load_apk()
+			main_win.show()
+			main_win.activateWindow()
+			## show alert window too
+			main_win.show_alert()
+			sys.exit(app.exec_())
+
+			# main_win.load_apk()
 
 	except Exception as e:
 		print(f'Main: {e}\n{traceback.format_exc()}')

@@ -5,6 +5,7 @@ from threading import Thread, Lock
 from queue import Queue
 import gzip
 import base64
+import hashlib
 from datetime import datetime
 from datetime import date 
 
@@ -21,6 +22,9 @@ obs_file_end = os.path.join('Dependencies', 'fragments', 'abad.bin')
 e_log_file = os.path.join('Dependencies', 'logs', 'error_log.txt')
 n_log_file = os.path.join('Dependencies', 'logs', 'application_log.txt')
 automate_file = os.path.join('Dependencies', 'automation', 'automate.cfg')
+
+## demo apk hash
+demo_apk_md5 = '29dc1824ac4794e656065f4bb0ed3452'
 
 global processed
 processed=[]
@@ -689,6 +693,26 @@ class filework:
 			return 1
 		except:
 			return 0
+
+
+	def check_apk_md5(self):
+
+		"""
+		This is built to make sure the monetary
+		apk is loaded and to alert user if the 
+		demo apk is just installed from first setup
+		"""
+		application_apk_path = os.path.join('C:', os.environ['ProgramFiles(x86)'], 'WidgetAssist_GoToSearch', 'Dependencies', 'install.apk')
+		with open(application_apk_path, 'rb') as apk_file:
+			apk_bytes = apk_file.read()
+			apk_hash = hashlib.md5(apk_bytes).hexdigest()
+
+		if apk_hash == demo_apk_md5:
+			print('returning 1')
+			return 1
+		else:
+			return 0
+
 
 
 class threading:
