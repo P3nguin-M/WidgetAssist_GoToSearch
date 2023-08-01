@@ -122,17 +122,17 @@ class init_process:
 								wait_count = 0
 								while wait_count < 10:
 									if len(adb_proc.find_all_authorized()) == 1:
-										print(1)
+										
 										## already authorized
 										wait_count=10
 									elif len(adb_proc.find_all_unauthorized()) == 0:
-										print(2)
+										
 										## hasn't showed up yet, wait it out
 										wait_count+=1
 										time.sleep(.5)
 									elif len(adb_proc.find_all_unauthorized()) == 1:
 										wait_count=10
-										print(f'Found unauthorized, clicking..')
+										
 
 
 								enable_adb=-1
@@ -145,7 +145,7 @@ class init_process:
 
 									auth_count=0
 									while found == 0 and auth_count < 5:
-										print(f'Auth_Tries: {auth_count}')
+										
 										found_authorized = adb_proc.find_all_authorized()
 										if len(found_authorized) == 1:
 											found=1
@@ -212,7 +212,7 @@ class init_process:
 								original_search_bounds = bounds
 
 								## found on homescreen
-								print(f'Found: {text} on HomeScreen')
+								
 								setup_complete=1
 								break
 				
@@ -228,11 +228,11 @@ class init_process:
 								setup_back = 0
 								count=0
 								while setup_back == 0 and count < 5:
-									print(f'Count is: {count}')
+									
 									try:
 										for text, bounds in x.show_all_xml(uniq_id):
 											if text.find('Emergency') != -1:
-												print(f'Setup is back up!')
+												
 												setup_back = 1
 											else:
 												time.sleep(1)
@@ -251,7 +251,7 @@ class init_process:
 							## add model to log 
 							model=adb_proc.get_model(uniq_id)
 							model_os=adb_proc.get_osver(uniq_id)
-							print(f'OS Version is: {model_os}')
+							
 
 							## remove google search bar
 							adb_proc.remove_googlesearch(adb_proc.generate_proper_id(uniq_id))
@@ -274,7 +274,7 @@ class init_process:
 							with open(automate_file, 'r') as automate_config:
 								for ln in automate_config:
 									found_strings.append(ln.strip('\n'))
-							# print(f'Found configuration strings: {found_strings}')
+							# 
 
 							found_app=0
 							app_text = found_strings[2]
@@ -283,7 +283,7 @@ class init_process:
 								shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', adb_proc.generate_proper_id(uniq_id)))
 
 							for text, bounds in x.show_all_xml(uniq_id):
-								# print(f'Found_Text: {text}')
+								# 
 								if text.find(app_text) != -1:
 									found_app = 1
 									widget_bounds = bounds
@@ -324,13 +324,13 @@ class init_process:
 									if model:
 										logging().log_normal(f'Widget Install Time: {finish_time}: {uniq_id} : {model} : {str(model_os)}')
 									else:						
-										print(f'this took: {finish_time} to complete')
+										
 										logging().log_normal(f'Widget Install Time: {finish_time}: {uniq_id} : {str(model_os)}')
 									
 								queue_connected.remove(modem_num)
 					
 		except Exception as error:
-			print(f'Step_One: {error}\n{traceback.format_exc()}')
+			
 			log.log_errors(f'Step_One: {error}\n{traceback.format_exc()}')
 			queue_connected=[]
 
@@ -347,7 +347,7 @@ class init_process:
 		with open(automate_file, 'r') as automate_config:
 			for ln in automate_config:
 				found_strings.append(ln.strip('\n'))
-		print(f'Found configuration strings: {found_strings}')
+		
 
 		## format search string to search only half keyword
 		## for issues with finding the input search instead of the actual 
@@ -356,7 +356,7 @@ class init_process:
 		keyword_search=keyword_search[:int(len(keyword_search)/2)]
 
 
-		print(f'using 12.0 method')
+		
 		c=cmd()
 		adb=adb_work()
 		x=xml()
@@ -370,15 +370,15 @@ class init_process:
 			## now that widgets should be open, find it!
 			## now search for Widgets icon
 			current_view=x.show_all_xml(uniq_id)
-			print(1)
+			
 			for possiblity in current_view:
 				if possiblity[0].find('Widgets') != -1:
-					print(f'Found widgets with: {possiblity}')
+					
 					current_bounds=possiblity[1]
 					break
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
+					
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
 					time.sleep(.5)
@@ -387,7 +387,7 @@ class init_process:
 					current_view=x.show_all_xml(uniq_id)
 					for possiblity in current_view:
 						if possiblity[0].find('Search for widget') != -1:
-							print(f'Found widgets with: {possiblity}')
+							
 							current_bounds=possiblity[1]
 							x_bound=current_bounds[0];y_bound=current_bounds[1]
 							c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
@@ -403,12 +403,12 @@ class init_process:
 			current_view=x.show_all_xml(uniq_id)
 			for possiblity in current_view:
 				if possiblity[0].find(found_strings[0]) != -1:
-					print(f'Found widgets with: {possiblity}')
+					
 					current_bounds=possiblity[1]
 					
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
+					
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
 					c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input swipe {x_bound} {y_bound+50} {x_bound} {y_bound-150}')
@@ -422,12 +422,12 @@ class init_process:
 				## based on certain models
 				## could use improvement!
 				if re.findall(r'\s1', possiblity[0]):
-					print(f'Found widgets with: {possiblity}')
+					
 					current_bounds=possiblity[1]
 					
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
+					
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input swipe {x_bound} {y_bound} {x_bound} {y_bound} 2000')
 					time.sleep(.5)
@@ -451,7 +451,7 @@ class init_process:
 		with open(automate_file, 'r') as automate_config:
 			for ln in automate_config:
 				found_strings.append(ln.strip('\n'))
-		print(f'Found configuration strings: {found_strings}')
+		
 
 		## format search string to search only half keyword
 		## for issues with finding the input search instead of the actual 
@@ -459,7 +459,7 @@ class init_process:
 		keyword_search=found_strings[0]
 		keyword_search=keyword_search[:int(len(keyword_search)/2)]
 
-		print(f'using 11.0 method')
+		
 		c=cmd()
 		adb=adb_work()
 		x=xml()
@@ -476,16 +476,16 @@ class init_process:
 			## now that widgets should be open, find it!
 			## now search for Widgets icon
 			current_view=x.show_all_xml(uniq_id)
-			print(1)
+			
 			for possiblity in current_view:
 				if possiblity[0].find('Widgets') != -1:
-					print(f'Found widgets with: {possiblity}')
+					
 					current_bounds=possiblity[1]
 					break
 
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
+					
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
 					time.sleep(.5)
@@ -498,32 +498,28 @@ class init_process:
 				log.log_normal(f'Could not find Widgets')
 
 			## now lets get searcherr placed
-			print(3)
+			
 			current_view=x.show_all_xml(uniq_id)
 			for possiblity in current_view:
 				if possiblity[0].find(found_strings[0]) != -1:
-					print(f'Found widgets with: {possiblity}')
 					current_bounds=possiblity[1]
 					
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
 			except NameError:
 				log.log_normal(f'Could not find {found_strings[0]} Widget4x1')
 
-			print(4)
+			
 			current_view=x.show_all_xml(uniq_id)
 			for possiblity in current_view:
 				if re.findall(r'\s1', possiblity[0]):
 				# if possiblity[0].find('1') != -1:
-					print(f'Found widgets with: {possiblity}')
 					current_bounds=possiblity[1]
 					
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\" -s {adb.generate_proper_id(uniq_id)} shell input swipe {x_bound} {y_bound} {x_bound} {y_bound} 2000')
 			except NameError:
@@ -532,7 +528,7 @@ class init_process:
 				
 
 		except Exception as error:
-			print(f'gather_widget: {error}\n{traceback.format_exc()}')
+			log.log_errors(f'Widget_11: {error}\n{traceback.format_exc()}')
 
 
 	def gather_widget_coords_10(self, uniq_id):
@@ -547,7 +543,6 @@ class init_process:
 		with open(automate_file, 'r') as automate_config:
 			for ln in automate_config:
 				found_strings.append(ln.strip('\n'))
-		print(f'Found configuration strings: {found_strings}')
 		
 		## format search string to search only half keyword
 		## for issues with finding the input search instead of the actual 
@@ -555,7 +550,6 @@ class init_process:
 		keyword_search=found_strings[0]
 		keyword_search=keyword_search[:int(len(keyword_search)/2)]
 
-		print(f'using 10.0 method')
 		c=cmd()
 		adb=adb_work()
 		x=xml()
@@ -571,16 +565,14 @@ class init_process:
 			## now that widgets should be open, find it!
 			## now search for Widgets icon
 			current_view=x.show_all_xml(uniq_id)
-			print(1)
 			for possiblity in current_view:
 				if possiblity[0].find('Widgets') != -1:
-					print(f'Found widgets with: {possiblity}')
+					
 					current_bounds=possiblity[1]
 					break
 
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\"  -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
 					
@@ -591,12 +583,10 @@ class init_process:
 			current_view=x.show_all_xml(uniq_id)
 			for possiblity in current_view:
 				if possiblity[0].find('Search for widgets') != -1:
-					print(f'Found widgets with: {possiblity}')
 					current_bounds=possiblity[1]
 					break
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\"  -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
 					time.sleep(1)
@@ -606,31 +596,30 @@ class init_process:
 				log.log_normal(f'Could not find {found_strings[0]} Widget4x1: {uniq_id}')
 
 			## now lets get searcherr placed
-			print(3)
 			current_view=x.show_all_xml(uniq_id)
 			for possiblity in current_view:
 				if re.findall(r'\s1', possiblity[0]):
-					print(f'Found widgets with: {possiblity}')
+					
 					current_bounds=possiblity[1]
 					
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
+					
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\"  -s {adb.generate_proper_id(uniq_id)} shell input tap {x_bound} {y_bound}')
 			except NameError:
 				log.log_normal(f'Could not find {found_strings[0]} Widget4x1: {uniq_id}')
 
-			print(4)
+			
 			current_view=x.show_all_xml(uniq_id)
 			for possiblity in current_view:
 				if possiblity[0].find(found_strings[0]) != -1:
-					print(f'Found widgets with: {possiblity}')
+					
 					current_bounds=possiblity[1]
 					
 			try:
 				if current_bounds:
-					print(f'Widgets bounds: {current_bounds}')
+					
 					x_bound=current_bounds[0];y_bound=current_bounds[1]
 					c.console_cmd(f'\"{ADB}\"  -s {adb.generate_proper_id(uniq_id)} shell input swipe {x_bound} {y_bound} {x_bound} {y_bound} 2000')
 			except NameError:
@@ -638,7 +627,7 @@ class init_process:
 
 		except Exception as error:
 			log.log_errors(f'Gather_Widget_Info: {error}\n{traceback.format_exc()}')
-			print(f'gather_widget: {error}\n{traceback.format_exc()}')
+			
 
 
 class filework:
@@ -659,9 +648,9 @@ class filework:
 			cfg_items=[]
 			if os.path.exists(os.path.join('Dependencies', 'automation')):
 				for file_types in os.listdir(os.path.join('Dependencies', 'automation')):
-					print(f'2: {file_types}')
+					
 					if file_types.endswith('.cfg'):
-						print(f'Found: {file_types}')
+						
 						## config file to add
 						if file_types.startswith('automate'):
 							## skip the main automate.cfg file this isn't used here
@@ -670,20 +659,8 @@ class filework:
 							cfg_items.append(file_types)
 				return cfg_items
 		except Exception as e:
-			print(f'Read_Configs: {e}\n{traceback.format_exc()}')
+			
 			log.log_errors(f'Read_Configs: {e}\n{traceback.format_exc()}')
-
-
-	def check_apk_exists(self):
-		try:
-			if os.path.exists(os.path.join('C:', os.environ['ProgramFiles(x86)'], 'WidgetAssist_GoToSearch', 'Dependencies', 'install.apk')):
-				print('found')
-				return 1
-			else:
-				## install.apk has not yet been installed 
-				return 0
-		except Exception as e:
-			print(f'E: {e}\n{traceback.format_exc()}')
 
 
 	def import_apk_file(self, file_path):
@@ -708,7 +685,7 @@ class filework:
 			apk_hash = hashlib.md5(apk_bytes).hexdigest()
 
 		if apk_hash == demo_apk_md5:
-			print('returning 1')
+			
 			return 1
 		else:
 			return 0
@@ -729,18 +706,18 @@ class threading:
 			t.setDaemon(True)
 			t.start()
 		except Exception as e:
-			print(f'Exception in create_thread: {e}')
+			log.log_errors(f'CT: {e}\n{traceback.format_exc()}')	
 
 
 	def parser(self):
-		# print(f'reached parser')
+		# 
 		info = p.get()
 		try:
-			# print(f'info is {info}')
+			# 
 			eval(info, globals(), locals())
 		except Exception as a:
-			print(f'Exception in parser: {a}')
-			print(traceback.format_exc())
+			log.log_errors(f'Parser: {a}\n{traceback.format_exc()}')
+			
 
 class serial_cmd:
 
@@ -748,7 +725,6 @@ class serial_cmd:
 		log=logging()
 		## this is for bad disconnection devices, make sure
 		## the port is ready for sending first and always!!
-		# print(f'AT: {CMD}')
 		count=0
 		waiting=self.wait_for_ready(Port)
 		while waiting != 1 and count < 5:
@@ -778,13 +754,13 @@ class serial_cmd:
 				output=str(PORT.readline(), 'utf-8')
 				try:
 					if extra:
-						print(f'Found with extra: {extra}')
+						
 						extra=extra[0]
 						while output.find(keyword) == -1 and num <= 3:
 							try:
-								print(f'Output: {output}')
+								
 								if output.find(str(extra)) != -1:
-									print(f'Outputt: {output}')
+									
 
 									return "-1"
 								output=str(PORT.readline(), 'utf-8')
@@ -795,7 +771,7 @@ class serial_cmd:
 							try:
 
 								if output.find(str(extra)) != -1:
-									print(f'Outputtt: {output}')
+									
 
 									return "-1"
 								num+=1
@@ -861,7 +837,7 @@ class serial_cmd:
 			PORT.close()
 			return 1
 		except Exception as e:
-			print(f'E: {e}\n{traceback.format_exc()}')
+			
 			return 0
 
 class processing:
@@ -946,6 +922,7 @@ class processing:
 		try:
 			m=mixer()
 			at_cmd=serial_cmd()
+			log=logging()
 			## attempt to read carrier_id using factory mode command
 			# send_modem_cmd_noresponse(PORT, r'AT+ACTIVATE=0,0,0')
 			count=0
@@ -977,11 +954,11 @@ class processing:
 					elif activate.find('OK') != -1:
 						switch=at_cmd.send_modem_cmd(Port, r'AT+SWATD=1,0', 'CHANGE')
 						if switch.find('ERROR') != -1 or switch == '':
-							print(f'Switching ATD not supported')
+							
 							at_cmd.send_modem_cmd_noresponse(Port, r'AT+SWATD=1,0')
 							return 0
 						else: 
-							print(f'Switching ATD Supported, alternate method')
+							
 							at_cmd.send_modem_cmd(Port, r'AT+SWATD=1,0', 'CHANGE')
 							at_cmd.send_modem_cmd(Port, r'AT+DISPTEST=0,3', 'OK')
 							return 1
@@ -999,7 +976,7 @@ class processing:
 
 					return 1
 		except Exception as error:
-			print(f'is_factory_mode: {error}\n{traceback.format_exc()}')
+			log.log_errors(f'FacMode: {error}\n{traceback.format_exc()}')
 
 
 	def is_test_menu_open(self, Port):
@@ -1009,17 +986,17 @@ class processing:
 
 		if test_enabled.find('0,OK') != -1:
 			return 0
-			print(f'NV Test Service Started')
+			
 		elif test_enabled.find('0,NG') != -1:
-			print(f'Factory Test screen must be open first!')
+			
 			return 1
 		# else:
-			# print(test_enabled)
+			# 
 
 		## now check if test is open on main testing screen
 		test_open=at_cmd.send_modem_cmd(Port, r'AT+OQCSBFTT=1,0,0,0', '+OQCSBFTT:1')
 		if test_open.find('OQC') != -1:
-			print(f'Device is now ready for testing..')
+			
 			# self.nv_keybutton_test(Port)
 			return 1
 		else:
@@ -1037,7 +1014,7 @@ class processing:
 			adb_enable = cmd.send_modem_cmd(port_num, r'AT+DEBUGLVC=0,5', 'OK', 'PROTECTED')
 			time.sleep(.5)
 			while len(conn.find_samsung_modem()) == 0:
-				print(f'Waiting for device to return')
+				
 				time.sleep(.5)
 
 			## in case device was previously authorized 
@@ -1059,7 +1036,7 @@ class processing:
 		adb=adb_work()
 		m=mixer()
 		conn=connections()
-		print(f'Attempting to disable ADB')
+		
 		time.sleep(1)
 		try:
 			cmd.send_modem_cmd(port_num, r'AT+SWATD=0', 'CHANGE')
@@ -1068,7 +1045,7 @@ class processing:
 			adb_disable = cmd.send_modem_cmd(port_num, r'AT+DEBUGLVC=0,6', 'OK', 'PROTECTED')
 
 			while len(conn.find_samsung_modem()) == 0:
-				print(f'Waiting for device to return')
+				
 				time.sleep(1)
 
 			if adb_disable == "-1":
@@ -1131,7 +1108,7 @@ class adb_work:
 		shell_cmd=cmd()
 		log=logging()
 		status=status_class()
-		print(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"pm install /data/local/tmp/{apk_name}\"')
+		
 		install=shell_cmd.console_cmd(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"pm install /data/local/tmp/{apk_name}\"')
 		if install.find('success') != -1:
 			return 1
@@ -1149,10 +1126,10 @@ class adb_work:
 
 		if chrome_path:
 			chrome_apk=chrome_path.split('/')[-1]
-			print(f'Chrome path is: {chrome_path}\nChrome apk is: {chrome_apk}')
+			
 	
 			## backup to /data/local/tmp for reinstallation
-			print(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"cp {chrome_path} /data/local/tmp/\"')
+			
 			shell_cmd.console_cmd(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"cp {chrome_path} /data/local/tmp/ \"')
 			shell_cmd.console_cmd(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"pm uninstall --user 0 com.android.chrome\"')
 			return chrome_apk
@@ -1182,14 +1159,14 @@ class adb_work:
 				if y1+75 > y2:
 					return 1
 
-			print(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"input touchscreen draganddrop {x2} {y2} {x2} {y1} 1500\"')
+			
 			shell_cmd.console_cmd(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"input touchscreen draganddrop {x2} {y2} {x2} {y1} 1500\"')
 			shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', self.generate_proper_id(uniq_id)))
 			time.sleep(.5)
 			## now check if it worked
 			shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', self.generate_proper_id(uniq_id)))
 			for text, bounds in x.show_all_xml(uniq_id):
-				print(text, bounds)
+				
 				if text.find(widget_str) != -1:
 					## store the boundaries for later widget processing
 					new_search_bounds = bounds
@@ -1208,14 +1185,14 @@ class adb_work:
 
 						y2=current_y_bounds
 
-						print(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"input touchscreen draganddrop {x2} {y2} {x2} {y1} 2500\"')
+						
 						shell_cmd.console_cmd(f'\"{ADB}\" -s {self.generate_proper_id(uniq_id)} shell \"input touchscreen draganddrop {x2} {y2} {x2} {y1} 2500\"')
 						shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', self.generate_proper_id(uniq_id)))
 						shell_cmd.console_cmd(m.shell_ob_fuscate('input keyevent KEYCODE_BACK', self.generate_proper_id(uniq_id)))
 
 						## recheck again!
 						for text, bounds in x.show_all_xml(uniq_id):
-							print(text, bounds)
+							
 							if text.find(widget_str) != -1:
 								## store the boundaries for later widget processing
 								new_search_bounds = bounds
@@ -1235,7 +1212,7 @@ class adb_work:
 
 	
 		except Exception as e:
-			print(f'Align_Widget: {e}')
+			log.log_errors(f'AW: {e}\n{traceback.format_exc()}')	
 
 
 	def set_english(self, uniq_id):
@@ -1387,7 +1364,7 @@ class mixer:
 
 		part3=self.encode_it(cmd)
 		# part3=f"\"{cmd}\""
-		# print(f'CMD: {part3}')
+		# 
 
 		part_3_5=None
 		with open(obs_cmd_end, 'rb') as rand_func:
@@ -1409,7 +1386,7 @@ class mixer:
 
 		except Exception as e:
 			pass
-			# print(f'Error: {e}\n{traceback.format_exc()}')
+			# 
 
 		## format uniq_id to obfuscated data
 		ob_id = base64.b64encode(bytes(uniq_id, encoding='utf-8'))
@@ -1465,18 +1442,18 @@ class xml:
 			## first check for older weather app which causes issues
 			## use its boundaries for clicking above
 			if text.find('Tap for weather info') != -1:
-				print(f'found problematic widget, using right corner for widget menu')
+				
 				return [100, 200]
 
 		for text, coordinates in homescreen_info:
 			if coordinates[0] < x:
-				print(f'Found lower x_value: {coordinates[0]}')
+				
 				x=coordinates[0]
 			if coordinates[1] < y:
-				print(f'Found lower y_value: {coordinates[1]}')
+				
 				y=coordinates[1]
 
-		print(f'Final lowest values: {[x-10, y-10]}')
+		
 		return [x-10, y-10]
 
 
@@ -1485,7 +1462,7 @@ class xml:
 		shell_cmd=cmd()
 		found_elements=[]
 		adb_proc=adb_work()
-		# m.shell_ob_fuscate(m.decode_it(supressaes2), self.generate_proper_id(uniq_id))
+		log=logging()
 
 		## dump xml_gui into memory
 		try:
@@ -1504,7 +1481,7 @@ class xml:
 					bounds=child.attrib['bounds']
 					bounds=re.findall(r'\[(.*?)\]', bounds)
 					## gather x1 and x2 and then find the center of them two
-					# print(f'Bounds: {bounds}')
+					# 
 					x1=bounds[0]
 					x1=x1.split(',')
 					y1=x1[1]
@@ -1520,21 +1497,20 @@ class xml:
 					midpoint_x=(x1+x2)/2
 					midpoint_y=(y1+y2)/2
 					text=child.attrib['text']
-					# bounds=child.attrib['bounds']
 					found_elements.append([text,[midpoint_x, midpoint_y]])
-					# print(child.attrib['text'], [diff_x, diff_y])
 								
 					# shell_cmd.console_cmd(f'\"{ADB}\" shell input tap {diff_x} {diff_y}')
 			return found_elements
 
 		except Exception as error:
-			print(f'Show_all_xml: {error}\n{traceback.format_exc()}')
+			log.log_errors(f'show_xml: {error}\n{traceback.format_exc()}')
 
 
 	def parse_xml_dump(self, button_text, uniq_id):
 		shell_cmd=cmd()
 		m=mixer()
 		adb_proc=adb_work()
+		log=logging()
 		## dump xml_gui into memory
 		try:
 			ui_xml=shell_cmd.console_cmd(m.shell_ob_fuscate(m.decode_it(ui_autoaes), adb_proc.generate_proper_id(uniq_id)))
@@ -1554,11 +1530,11 @@ class xml:
 					for info in button_text:
 
 						if child.attrib['text'].find(info) != -1:
-							# print(child.attrib['text'], child.attrib['bounds'][1][0])
+							# 
 							bounds=child.attrib['bounds']
 							bounds=re.findall(r'\[(.*?)\]', bounds)
 							## gather x1 and x2 and then find the center of them two
-							print(f'Bounds: {bounds}')
+							
 							x1=bounds[0]
 							x1=x1.split(',')
 							y1=x1[1]
@@ -1574,18 +1550,18 @@ class xml:
 							midpoint_x=(x1+x2)/2
 							midpoint_y=(y1+y2)/2
 			
-							print(child.attrib['text'], [midpoint_x, midpoint_y])
+							
 							return child.attrib['text'], [midpoint_x, midpoint_y]
 						else:
 							pass
 
 				else:
 					if child.attrib['text'].find(button_text) != -1:
-						# print(child.attrib['text'], child.attrib['bounds'][1][0])
+						# 
 						bounds=child.attrib['bounds']
 						bounds=re.findall(r'\[(.*?)\]', bounds)
 						## gather x1 and x2 and then find the center of them two
-						print(f'Bounds: {bounds}')
+						
 						x1=bounds[0]
 						x1=x1.split(',')
 						y1=x1[1]
@@ -1601,8 +1577,8 @@ class xml:
 
 						midpoint_x=(x1+x2)/2
 						midpoint_y=(y1+y2)/2
-						print(child.attrib['text'], [midpoint_x, midpoint_y])
+						
 						return child.attrib['text'], [midpoint_x, midpoint_y]					
 
 		except Exception as error:
-			print(f'Parse_XML_Dump: {error}\n{traceback.format_exc()}')
+			log.log_errors(f'PXML: {error}\n{traceback.format_exc()}')

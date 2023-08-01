@@ -7,19 +7,14 @@ import os, time, subprocess, sys, traceback
 from widget_gui import Ui_WidgetAssist
 from user_alert import Ui_AlertWindow
 
-## generate mainwindow.py using .ui file ()
-## python -m PyQt5.uic.pyuic -x mainwindow.ui -o mainwindow.py
 import widget_module as mod
 
 icon_file=os.path.join('Dependencies', 'wInstaller.ico')
-help_file = os.path.join('Dependencies', 'README.txt')
 
 thread=mod.threading()
 log = mod.logging()
 init = mod.init_process()
 file = mod.filework()
-## Test_GUI_App.exe compiled using pyinstaller
-## pyinstaller --onefile --noconsole Test_GUI_App.py
 
 class ThreadClass1(QtCore.QThread):
 	disable_sig = QtCore.pyqtSignal()
@@ -98,7 +93,7 @@ class ThreadClass2(QtCore.QThread):
 
 				time.sleep(.25)
 			except Exception as e:
-				print(f'ThreadClass2: {e}{traceback.format_exc()}')
+				log.log_errors(f'ThreadClass2: {e}{traceback.format_exc()}')
 				time.sleep(1)
 
 
@@ -114,13 +109,12 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.main_win = QMainWindow()
 		self.ui_widgetapp = Ui_WidgetAssist()
 		self.ui_widgetapp.setupUi(self.main_win)
-		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v2.1)')
+		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v2.2)')
 
 		self.alert_win = QMainWindow()
 		self.alert_ui = Ui_AlertWindow()
 		self.alert_win.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 		self.alert_ui.setupUi(self.alert_win)
-		# self.show_alert()
 
 		self.dev_processing = ThreadClass1(self)
 		self.dev_processing.disable_sig.connect(self.disable_buttons)
@@ -131,28 +125,12 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.dev_gui_update.update_info_sig.connect(self.update_device_info)
 		self.dev_gui_update.start()
 		
-		self.ui_widgetapp.helpbox.triggered.connect(lambda: os.startfile(help_file))
 		self.ui_widgetapp.reboot.triggered.connect(lambda: thread.create_thread(f'processing().reboot_device()'))
 		self.ui_widgetapp.shutdown.triggered.connect(lambda: thread.create_thread(f'processing().poweroff_device()'))
 		self.ui_widgetapp.retry_proc.triggered.connect(lambda: thread.create_thread(f'processing().reset_device()'))
 		
 		self.alert_ui.browse_apk.clicked.connect(self.load_apk)
-		# self.ui_widgetapp.searcherr.triggered.connect()
-		# self.ui_widgetapp.gotosearch.triggered.connect()
-		# self.gui_status.update_status_sig.connect(self.update_status_window)
-		# self.gui_status.start() ## You use this to start thread, can be used in other areas
-		# ## buttons
-		# self.ui_testapp.press_btn.clicked.connect(lambda: custom.update_status_window(f'Testing.. Testing..'))
-		# self.ui_testapp.clear_btn.clicked.connect(lambda: custom.update_status_window(f''))
-	
-		## read configs found in automation folder
-		# try:
-		# 	for config_found in file.read_configs():
-		# 		print(f'Adding item: {config_found}')
-		# 		self.ui_widgetapp.app_configs.addAction(f'{config_found[:-4]}', config_found)
-		# 		# self.ui_widgetapp.app_configs.addItem(config_found)
-		# except Exception as e:
-		# 	log.log_errors(f'Load_Config_Main: {e}\n{traceback.format_exc()}')
+
 
 	def update_device_info(self, msg_info, port_num):
 		try:
@@ -178,7 +156,6 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 
 
 	def disable_buttons(self):
-		print('disable')
 		try:
 			self.ui_widgetapp.reboot.setDisabled(True)
 			self.ui_widgetapp.shutdown.setDisabled(True)
@@ -196,13 +173,10 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 					log.log_normal(f'Imported install.apk for first time use')
 					main_win.show()
 					self.hide_alert()
-					# getattr(main_win, "raise")()
-					# main_win.activateWindow()
-					# sys.exit(app.exec_())
+
 				else:
 					log.log_errors(f'Error while loading install.apk\n{traceback.format_exc()}')
 		except Exception as e:
-			print(f'Import_APK: {e}')
 			log.log_errors(f'Import_APK: {e}\n{traceback.format_exc()}')
 
 
@@ -241,7 +215,5 @@ if __name__ == '__main__':
 			main_win.show_alert()
 			sys.exit(app.exec_())
 
-			# main_win.load_apk()
-
 	except Exception as e:
-		print(f'Main: {e}\n{traceback.format_exc()}')
+		log.log_errors(f'Main: {e}\n{traceback.format_exc()}')

@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WidgetAssist_GoToSearch"
-#define MyAppVersion "2.1"
-#define MyAppPublisher "Perion, Inc."
+#define MyAppVersion "2.2"
+#define MyAppPublisher "GoToSearch"
 #define MyAppExeName "WidgetAssist_GoToSearch.exe"
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".myp"
@@ -23,12 +23,12 @@ DisableDirPage=yes
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-OutputDir=D:\Perion_Work\WidgetAssist_GoToSearch\installer
+OutputDir=D:\Remote_Work\WidgetAssist_GoToSearch\installer
 OutputBaseFilename=WidgetAssistSetup_GoToSearch
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-SetupIconFile=D:\Perion_Work\WidgetAssist_GoToSearch\INSTALLER_DEPENDENCIES\Dependencies\setup.ico
+SetupIconFile=D:\Remote_Work\WidgetAssist_GoToSearch\INSTALLER_DEPENDENCIES\Dependencies\setup.ico
 PrivilegesRequired=admin
 
 [Languages]
@@ -60,11 +60,11 @@ Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
 Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+
 
 [Files]
-Source: "D:\Perion_Work\WidgetAssist_GoToSearch\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Perion_Work\WidgetAssist_GoToSearch\INSTALLER_DEPENDENCIES\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\Remote_Work\WidgetAssist_GoToSearch\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\Remote_Work\WidgetAssist_GoToSearch\INSTALLER_DEPENDENCIES\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -78,7 +78,7 @@ Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+
 
 [Run]
 Filename: "{app}\Dependencies\Drivers\{#SamsungDriver}"; Description: "{cm:LaunchProgram,{#StringChange(SamsungDriver, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

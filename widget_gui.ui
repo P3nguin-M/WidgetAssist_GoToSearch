@@ -60,7 +60,7 @@ text-align: center;</string>
      <x>0</x>
      <y>0</y>
      <width>450</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -70,7 +70,6 @@ text-align: center;</string>
     <addaction name="reboot"/>
     <addaction name="shutdown"/>
     <addaction name="separator"/>
-    <addaction name="helpbox"/>
    </widget>
    <widget class="QMenu" name="menuRetry">
     <property name="title">
