@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WidgetAssist_GoToSearch"
-#define MyAppVersion "2.2"
+#define MyAppVersion "3.0"
 #define MyAppPublisher "GoToSearch"
 #define MyAppExeName "WidgetAssist_GoToSearch.exe"
 #define MyAppAssocName MyAppName + " File"
