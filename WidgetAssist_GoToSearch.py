@@ -28,7 +28,7 @@ class ThreadClass1(QtCore.QThread):
 		connection_class = mod.connections()
 		status = mod.status_class()
 		thread = mod.threading()
-		
+		print(f'Started T1')
 		global already_processed 
 
 		already_processed = []
@@ -102,6 +102,7 @@ class ThreadClass2(QtCore.QThread):
 
 
 
+
 class MainWindow(QMainWindow, Ui_WidgetAssist):
 	def __init__(self, parent = None):
 		super(MainWindow, self).__init__(parent)
@@ -109,7 +110,7 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.main_win = QMainWindow()
 		self.ui_widgetapp = Ui_WidgetAssist()
 		self.ui_widgetapp.setupUi(self.main_win)
-		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v2.2)')
+		self.main_win.setWindowTitle('WidgetAssist: [GoToSearch] (v3.0)')
 
 		self.alert_win = QMainWindow()
 		self.alert_ui = Ui_AlertWindow()
@@ -119,7 +120,6 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.dev_processing = ThreadClass1(self)
 		self.dev_processing.disable_sig.connect(self.disable_buttons)
 		self.dev_processing.enable_sig.connect(self.enable_buttons)
-		self.dev_processing.start()
 
 		self.dev_gui_update = ThreadClass2(self)
 		self.dev_gui_update.update_info_sig.connect(self.update_device_info)
@@ -130,6 +130,27 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 		self.ui_widgetapp.retry_proc.triggered.connect(lambda: thread.create_thread(f'processing().reset_device()'))
 		
 		self.alert_ui.browse_apk.clicked.connect(self.load_apk)
+
+		self.ui_widgetapp.n_log.triggered.connect(log.open_normal_log)
+		self.ui_widgetapp.e_log.triggered.connect(log.open_error_log)
+		self.ui_widgetapp.fail_log.triggered.connect(log.open_fail_count)
+		self.ui_widgetapp.pass_log.triggered.connect(log.open_succ_count)
+		
+		## detect for first init
+		self.check_apk_loaded()
+
+	def check_apk_loaded(self):
+		"""
+		This is created to make sure the user
+		uploads their apk on first init
+		"""
+		if file.check_apk_exists() == 1:
+			self.disable_buttons()
+			self.alert_win.show()
+		else:
+			## apk exists, starts processing thread
+			self.dev_processing.start()
+
 
 
 	def update_device_info(self, msg_info, port_num):
@@ -150,7 +171,10 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 			self.ui_widgetapp.reboot.setDisabled(False)
 			self.ui_widgetapp.shutdown.setDisabled(False)
 			self.ui_widgetapp.retry_proc.setDisabled(False)
-
+			self.ui_widgetapp.n_log.setDisabled(False)
+			self.ui_widgetapp.e_log.setDisabled(False)
+			self.ui_widgetapp.pass_log.setDisabled(False)
+			self.ui_widgetapp.fail_log.setDisabled(False)
 		except Exception as e:
 			log.log_errors(f'enable_btns: {e}')
 
@@ -160,8 +184,13 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 			self.ui_widgetapp.reboot.setDisabled(True)
 			self.ui_widgetapp.shutdown.setDisabled(True)
 			self.ui_widgetapp.retry_proc.setDisabled(True)
+			self.ui_widgetapp.n_log.setDisabled(True)
+			self.ui_widgetapp.e_log.setDisabled(True)
+			self.ui_widgetapp.pass_log.setDisabled(True)
+			self.ui_widgetapp.fail_log.setDisabled(True)
 
 		except Exception as e:
+			print(f'disable_btns: {e}')
 			log.log_errors(f'disable_btns: {e}')
 
 	def load_apk(self):
@@ -171,12 +200,16 @@ class MainWindow(QMainWindow, Ui_WidgetAssist):
 				imported_apk_file_path=imported_apk_file[0]
 				if file.import_apk_file(imported_apk_file_path) == 1:
 					log.log_normal(f'Imported install.apk for first time use')
-					main_win.show()
 					self.hide_alert()
+					## start processing thread
+					self.dev_processing.start()
+					## re-enable buttons
+					self.enable_buttons()
 
 				else:
 					log.log_errors(f'Error while loading install.apk\n{traceback.format_exc()}')
 		except Exception as e:
+			print(f'Import_APK: {e}\n{traceback.format_exc()}')
 			log.log_errors(f'Import_APK: {e}\n{traceback.format_exc()}')
 
 
@@ -202,18 +235,10 @@ if __name__ == '__main__':
 		## make sure if demo apk is 
 		## only installed to alert user
 		## on every runtime instance
-		if file.check_apk_md5() == 0:
-			main_win = MainWindow()
-			main_win.show()
-			main_win.activateWindow()
-			sys.exit(app.exec_())
-		else:
-			main_win = MainWindow()
-			main_win.show()
-			main_win.activateWindow()
-			## show alert window too
-			main_win.show_alert()
-			sys.exit(app.exec_())
+		main_win = MainWindow()
+		main_win.show()
+		main_win.activateWindow()
+		sys.exit(app.exec_())
 
 	except Exception as e:
 		log.log_errors(f'Main: {e}\n{traceback.format_exc()}')
