@@ -60,7 +60,7 @@ text-align: center;</string>
      <x>0</x>
      <y>0</y>
      <width>450</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -77,8 +77,19 @@ text-align: center;</string>
     </property>
     <addaction name="retry_proc"/>
    </widget>
+   <widget class="QMenu" name="menuLogging">
+    <property name="title">
+     <string>Logging</string>
+    </property>
+    <addaction name="n_log"/>
+    <addaction name="e_log"/>
+    <addaction name="separator"/>
+    <addaction name="pass_log"/>
+    <addaction name="fail_log"/>
+   </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuRetry"/>
+   <addaction name="menuLogging"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="reboot">
@@ -104,6 +115,26 @@ text-align: center;</string>
   <action name="retry_proc">
    <property name="text">
     <string>Reset Device</string>
+   </property>
+  </action>
+  <action name="n_log">
+   <property name="text">
+    <string>Process Log</string>
+   </property>
+  </action>
+  <action name="e_log">
+   <property name="text">
+    <string>Error Log</string>
+   </property>
+  </action>
+  <action name="pass_log">
+   <property name="text">
+    <string>Passed Count</string>
+   </property>
+  </action>
+  <action name="fail_log">
+   <property name="text">
+    <string>Failed Count</string>
    </property>
   </action>
  </widget>
