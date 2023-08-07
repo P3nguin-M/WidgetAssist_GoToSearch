@@ -35,12 +35,12 @@ class Ui_AlertWindow(object):
         self.gridLayout.addWidget(self.textBrowser, 0, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         self.browse_apk = QtWidgets.QPushButton(self.centralwidget)
-        self.browse_apk.setStyleSheet("")
+        self.browse_apk.setStyleSheet("font: 14pt \"Segoe UI\";")
         self.browse_apk.setObjectName("browse_apk")
         self.gridLayout_2.addWidget(self.browse_apk, 1, 0, 1, 1)
         AlertWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(AlertWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 350, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 350, 22))
         self.menubar.setObjectName("menubar")
         AlertWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(AlertWindow)
@@ -60,8 +60,9 @@ class Ui_AlertWindow(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:\'Segoe UI\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#c50000;\">ALERT: The current APK in use is the DEMO APK. Please replace it with the correct APK to make sure revenue is generated</span></p></body></html>"))
-        self.browse_apk.setText(_translate("AlertWindow", "SELECT APK"))
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#c50000;\">ALERT:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#000000;\">No current APK file found. Please select \'Browse\' to upload.</span></p></body></html>"))
+        self.browse_apk.setText(_translate("AlertWindow", "Browse"))
 
 
 if __name__ == "__main__":
